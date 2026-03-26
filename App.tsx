@@ -1,16 +1,20 @@
+import { Suspense } from 'react'
 import { StatusBar } from 'expo-status-bar'
-import { SafeAreaView, StyleSheet } from 'react-native'
-import { HermesValidation } from './src/debug/HermesValidation'
+import { SQLiteProvider } from 'expo-sqlite'
+import { DatabaseInitScreen } from './src/screens/DatabaseInitScreen'
+import { AppNavigator } from './src/navigation/AppNavigator'
 
 export default function App() {
   return (
-    <SafeAreaView style={styles.container}>
-      <StatusBar style="auto" />
-      <HermesValidation />
-    </SafeAreaView>
+    <Suspense fallback={<DatabaseInitScreen />}>
+      <SQLiteProvider
+        databaseName="ko.db"
+        assetSource={require('./assets/bible/ko.db')}
+        useSuspense
+      >
+        <StatusBar style="auto" />
+        <AppNavigator />
+      </SQLiteProvider>
+    </Suspense>
   )
 }
-
-const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#fff' },
-})

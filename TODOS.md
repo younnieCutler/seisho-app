@@ -75,20 +75,18 @@
 
 ## P0 — 구현 시작 전 필수 검증
 
-### [TODO-07] computus@3.x + Temporal.PlainDate Hermes 호환성 검증
-**What:** Expo + React Native(Hermes 엔진)에서 `computus@3.x` + `@js-temporal/polyfill@^0.4.4` 동작 확인.
-**Why:** 절기 감지 알고리즘(Feature 1, 10) 전체가 이 라이브러리에 의존. Hermes에서 Temporal이 네이티브 미지원이며 폴리필 호환성 미검증.
-**Pros:** 실패 시 조기 발견 → computus@1.x(Date 객체) 또는 순수 JS로 대체 결정 가능.
-**Cons:** 검증 자체에 환경 셋업 필요.
-**Context:** `expo init`으로 Expo 프로젝트 생성 → `computus` + `@js-temporal/polyfill` 설치 → Android 에뮬레이터/실기기에서 `computus(2026).month` 호출 → 정상 반환 확인. 실패 시 computus@1.x API: `gregorian(year)` → `Date` 객체, `.getMonth()` 0-indexed → `+1` 보정 필요.
-**Effort:** S (human: 2시간 / CC: ~10분)
-**Depends on:** Expo 프로젝트 초기화
+### ~~[TODO-07] computus@3.x + Temporal.PlainDate Hermes 호환성 검증~~ ✅ DONE (2026-03-26)
+**결과:** iOS Expo Go (SDK 54, Hermes) 에서 4개 테스트 전부 PASS.
+- `computus(2026).month === 4` ✅
+- `computus(2026).day === 5` ✅
+- `Temporal.Now.plainDateISO('Asia/Seoul')` → 유효 날짜 ✅
+- `Temporal.PlainDate.from('2026-04-05').month === 4` ✅
 
 ---
 
 ## P1 — v1 배포 직후 우선 구현 (추가 항목)
 
-### [TODO-08] SQLite 첫 실행 로딩 UI
+### ~~[TODO-08] SQLite 첫 실행 로딩 UI~~ ✅ DONE (2026-03-26)
 **What:** SQLite 데이터베이스 복사 중 로딩 스피너/화면 표시.
 **Why:** 첫 실행 시 5~10초 복사 대기 동안 앱이 멈춰 보일 수 있어 사용자가 이탈할 가능성.
 **Pros:** 첫 인상 개선, "앱이 죽었나" 오인 방지.

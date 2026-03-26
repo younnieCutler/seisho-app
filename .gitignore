@@ -10,6 +10,7 @@ dist/
 .claude/
 .agents/
 brain/
+plan/
 *.log
 
 # build artifacts

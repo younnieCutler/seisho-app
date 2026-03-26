@@ -2,6 +2,7 @@
   "expo": {
     "name": "seisho-app",
     "slug": "seisho-app",
+    "owner": "jeongyunkim",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -12,7 +13,11 @@
       "backgroundColor": "#ffffff"
     },
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.jeongyunkim.seishoapp",
+      "infoPlist": {
+        "ITSAppUsesNonExemptEncryption": false
+      }
     },
     "android": {
       "adaptiveIcon": {
@@ -25,6 +30,15 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "plugins": [
+      "expo-sqlite",
+      "expo-asset"
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "8268e70a-d78d-41fc-8208-9452c54511ec"
+      }
     }
   }
 }

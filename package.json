@@ -1,23 +1,47 @@
 {
-  "name": "seisho-temp",
+  "name": "seisho-app",
   "version": "1.0.0",
   "main": "index.ts",
   "scripts": {
     "start": "expo start",
     "android": "expo start --android",
     "ios": "expo start --ios",
-    "web": "expo start --web"
+    "web": "expo start --web",
+    "test": "jest"
+  },
+  "jest": {
+    "preset": "jest-expo",
+    "testPathIgnorePatterns": [
+      "/node_modules/",
+      "/.claude/"
+    ],
+    "transformIgnorePatterns": [
+      "node_modules/(?!((jest-)?react-native|@react-native(-community)?)|expo(nent)?|@expo(nent)?/.*|@expo-google-fonts/.*|react-navigation|@react-navigation/.*|@unimodules/.*|unimodules|sentry-expo|native-base|react-native-svg)"
+    ]
   },
   "dependencies": {
     "@js-temporal/polyfill": "^0.4.4",
+    "@react-navigation/bottom-tabs": "^7.15.7",
+    "@react-navigation/native": "^7.2.0",
+    "@supabase/supabase-js": "^2.100.0",
     "computus": "^3.0.1",
-    "expo": "~55.0.8",
-    "expo-status-bar": "~55.0.4",
-    "react": "19.2.0",
-    "react-native": "0.83.2"
+    "expo": "~54.0.0",
+    "expo-asset": "~12.0.12",
+    "expo-dev-client": "~6.0.20",
+    "expo-sqlite": "~16.0.10",
+    "expo-status-bar": "~3.0.9",
+    "react": "19.1.0",
+    "react-native": "0.81.5",
+    "react-native-mmkv": "^4.3.0",
+    "react-native-safe-area-context": "~5.6.0",
+    "react-native-screens": "~4.16.0"
   },
   "devDependencies": {
-    "@types/react": "~19.2.2",
+    "@types/better-sqlite3": "^7.6.13",
+    "@types/jest": "29.5.14",
+    "@types/react": "~19.1.10",
+    "better-sqlite3": "^12.8.0",
+    "jest-expo": "~54.0.17",
     "typescript": "~5.9.2"
   },
   "private": true
