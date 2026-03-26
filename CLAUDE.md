@@ -14,7 +14,11 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Status
 
-This project is in its initial phase. No framework, dependencies, or source code have been set up yet. Update this file once the tech stack is established.
+**2026-03-26**: Phase 0 진행 중.
+- Expo (React Native) + TypeScript 프로젝트 초기화 완료
+- `computus@3`, `@js-temporal/polyfill@^0.4.4` 설치 완료
+- `src/debug/HermesValidation.tsx` 작성 완료 → 실기기 Expo Go 테스트 대기 중 (TODO-07)
+- TODO-07 결과에 따라 Phase 1 진행 또는 대안 라이브러리 결정
 
 ## Gotchas
 
@@ -31,4 +35,5 @@ This project is in its initial phase. No framework, dependencies, or source code
 - (아직 없음 — 실제 사용 중 발견되면 추가)
 
 ### 일반
-- (아직 없음 — 실제 사용 중 발견되면 추가)
+- **npm 캐시 권한 오류**: `npm install` 시 `EACCES` 오류 발생 가능 → `sudo chown -R 501:20 "/Users/macbook/.npm"` 로 해결
+- **Expo 초기화**: 기존 파일이 있는 디렉토리에 `create-expo-app .` 불가 → 임시 디렉토리에 생성 후 필요 파일만 복사
