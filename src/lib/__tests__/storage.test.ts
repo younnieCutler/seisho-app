@@ -7,7 +7,7 @@ jest.mock('../../utils/date', () => ({
     `${d.year}-${String(d.month).padStart(2, '0')}-${String(d.day).padStart(2, '0')}`,
 }))
 
-import { storage, getReadDates, markReadToday, isOnboarded, setOnboarded, getAgeGroup, STORAGE_KEYS } from '../storage'
+import { storage, getReadDates, markReadToday, isOnboarded, setOnboarded, getAgeGroup, getUserId, setUserId, STORAGE_KEYS } from '../storage'
 
 beforeEach(() => {
   // MMKV 인스턴스는 모듈 레벨에서 생성되므로 테스트 간 격리를 위해 clearAll
@@ -44,6 +44,18 @@ describe('markReadToday', () => {
     const dates = getReadDates()
     expect(dates).toContain('2026-03-31')
     expect(dates).toContain('2026-04-01')
+  })
+})
+
+describe('getUserId / setUserId', () => {
+  it('returns undefined when no user_id stored', () => {
+    expect(getUserId()).toBeUndefined()
+  })
+
+  it('stores and retrieves user_id', () => {
+    const id = '550e8400-e29b-41d4-a716-446655440000'
+    setUserId(id)
+    expect(getUserId()).toBe(id)
   })
 })
 

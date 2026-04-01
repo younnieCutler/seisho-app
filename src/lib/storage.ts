@@ -7,6 +7,7 @@ export const STORAGE_KEYS = {
   ONBOARDED: 'user.onboarded',
   AGE_GROUP: 'user.age_group',
   READ_DATES: 'reading.dates',  // JSON.stringify(string[]) — "YYYY-MM-DD" 배열
+  USER_ID: 'user.id',           // Supabase 익명 인증 user_id
 } as const
 
 export function getReadDates(): string[] {
@@ -33,4 +34,12 @@ export function setOnboarded(ageGroup: string): void {
 
 export function getAgeGroup(): string | undefined {
   return storage.getString(STORAGE_KEYS.AGE_GROUP)
+}
+
+export function getUserId(): string | undefined {
+  return storage.getString(STORAGE_KEYS.USER_ID)
+}
+
+export function setUserId(id: string): void {
+  storage.set(STORAGE_KEYS.USER_ID, id)
 }
