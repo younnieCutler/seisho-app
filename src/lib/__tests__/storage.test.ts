@@ -7,7 +7,7 @@ jest.mock('../../utils/date', () => ({
     `${d.year}-${String(d.month).padStart(2, '0')}-${String(d.day).padStart(2, '0')}`,
 }))
 
-import { storage, getReadDates, markReadToday, isOnboarded, setOnboarded, getAgeGroup, getUserId, setUserId, STORAGE_KEYS } from '../storage'
+import { storage, getReadDates, markReadToday, isOnboarded, setOnboarded, getAgeGroup, getUserId, setUserId, getNickname, setNickname, STORAGE_KEYS } from '../storage'
 
 beforeEach(() => {
   // MMKV 인스턴스는 모듈 레벨에서 생성되므로 테스트 간 격리를 위해 clearAll
@@ -72,5 +72,16 @@ describe('isOnboarded / setOnboarded', () => {
   it('getAgeGroup이 setOnboarded의 ageGroup 반환', () => {
     setOnboarded('30대')
     expect(getAgeGroup()).toBe('30대')
+  })
+})
+
+describe('getNickname / setNickname', () => {
+  it('저장 전에는 undefined 반환', () => {
+    expect(getNickname()).toBeUndefined()
+  })
+
+  it('setNickname 후 getNickname 반환', () => {
+    setNickname('말씀이')
+    expect(getNickname()).toBe('말씀이')
   })
 })

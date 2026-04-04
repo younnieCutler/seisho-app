@@ -8,6 +8,7 @@ export const STORAGE_KEYS = {
   AGE_GROUP: 'user.age_group',
   READ_DATES: 'reading.dates',  // JSON.stringify(string[]) — "YYYY-MM-DD" 배열
   USER_ID: 'user.id',           // Supabase 익명 인증 user_id
+  NICKNAME: 'user.nickname',
 } as const
 
 export function getReadDates(): string[] {
@@ -42,4 +43,12 @@ export function getUserId(): string | undefined {
 
 export function setUserId(id: string): void {
   storage.set(STORAGE_KEYS.USER_ID, id)
+}
+
+export function getNickname(): string | undefined {
+  return storage.getString(STORAGE_KEYS.NICKNAME)
+}
+
+export function setNickname(name: string): void {
+  storage.set(STORAGE_KEYS.NICKNAME, name)
 }
