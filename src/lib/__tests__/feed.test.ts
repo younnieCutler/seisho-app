@@ -119,4 +119,27 @@ describe('subscribeToFeed', () => {
     unsubscribe()
     expect(supabase.removeChannel).toHaveBeenCalledWith(mockChannel)
   })
+
+  it('Realtime 이벤트 수신 시 callback 호출', async () => {
+    let capturedHandler: (() => Promise<void>) | null = null
+    const mockSubscribe = jest.fn().mockReturnValue({})
+    const mockOn = jest.fn().mockImplementation((_event: string, _filter: unknown, handler: () => Promise<void>) => {
+      capturedHandler = handler
+      return { subscribe: mockSubscribe }
+    })
+    ;(supabase.channel as jest.Mock).mockReturnValue({ on: mockOn })
+
+    // getFeedPosts mock (supabase.from 체인)
+    const mockOrder = jest.fn().mockResolvedValue({ data: [], error: null })
+    const mockEq = jest.fn().mockReturnValue({ order: mockOrder })
+    const mockSelect = jest.fn().mockReturnValue({ eq: mockEq })
+    ;(supabase.from as jest.Mock).mockReturnValue({ select: mockSelect })
+
+    const cb = jest.fn()
+    subscribeToFeed('ABC123', cb)
+
+    expect(capturedHandler).not.toBeNull()
+    await capturedHandler!()
+    expect(cb).toHaveBeenCalledWith([])
+  })
 })

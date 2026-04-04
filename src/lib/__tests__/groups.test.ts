@@ -171,3 +171,60 @@ describe('getMyGroups', () => {
     expect(result).toEqual([])
   })
 })
+
+// ---- 커버리지 갭 채우기 ----
+describe('createGroup — 에러 경로', () => {
+  it('groups.insert 에러 시 throw', async () => {
+    ;(supabase.rpc as jest.Mock).mockResolvedValue({ data: 'ABC123', error: null })
+    ;(supabase.from as jest.Mock).mockReturnValueOnce({
+      insert: jest.fn().mockResolvedValue({ error: { message: 'insert failed' } }),
+    })
+    await expect(createGroup()).rejects.toThrow('insert failed')
+  })
+
+  it('member_status.insert 에러 시 throw', async () => {
+    ;(supabase.rpc as jest.Mock).mockResolvedValue({ data: 'ABC123', error: null })
+    ;(supabase.from as jest.Mock)
+      .mockReturnValueOnce({ insert: jest.fn().mockResolvedValue({ error: null }) })
+      .mockReturnValueOnce({ insert: jest.fn().mockResolvedValue({ error: { message: 'member failed' } }) })
+    await expect(createGroup()).rejects.toThrow('member failed')
+  })
+})
+
+describe('joinGroup — 에러 경로', () => {
+  it('인증 없으면 throw', async () => {
+    ;(getUserId as jest.Mock).mockReturnValueOnce(undefined)
+    await expect(joinGroup('ABC123')).rejects.toThrow('Not authenticated')
+  })
+
+  it('member insert 에러 시 throw', async () => {
+    ;(supabase.from as jest.Mock)
+      .mockReturnValueOnce({
+        select: jest.fn().mockReturnValue({
+          eq: jest.fn().mockReturnValue({
+            single: jest.fn().mockResolvedValue({ data: { group_code: 'ABC123' }, error: null }),
+          }),
+        }),
+      })
+      .mockReturnValueOnce({
+        select: jest.fn().mockReturnValue({
+          eq: jest.fn().mockReturnValue({
+            eq: jest.fn().mockReturnValue({
+              maybeSingle: jest.fn().mockResolvedValue({ data: null, error: null }),
+            }),
+          }),
+        }),
+      })
+      .mockReturnValueOnce({
+        insert: jest.fn().mockResolvedValue({ error: { message: 'insert err' } }),
+      })
+    await expect(joinGroup('ABC123')).rejects.toThrow('insert err')
+  })
+})
+
+describe('leaveGroup — 에러 경로', () => {
+  it('인증 없으면 throw', async () => {
+    ;(getUserId as jest.Mock).mockReturnValueOnce(undefined)
+    await expect(leaveGroup('ABC123')).rejects.toThrow('Not authenticated')
+  })
+})
