@@ -7,9 +7,6 @@ import { getFeedPosts, subscribeToFeed } from '../../lib/feed'
 
 jest.mock('../../lib/groups', () => ({
   getMyGroups: jest.fn(),
-  createGroup: jest.fn(),
-  joinGroup: jest.fn(),
-  leaveGroup: jest.fn(),
 }))
 
 jest.mock('../../lib/feed', () => ({
@@ -20,7 +17,6 @@ jest.mock('../../lib/feed', () => ({
 
 jest.mock('../../lib/storage', () => ({
   getNickname: jest.fn(),
-  setNickname: jest.fn(),
   getUserId: jest.fn().mockReturnValue('user-uuid-1'),
 }))
 
