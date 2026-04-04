@@ -7,6 +7,7 @@ import { OnboardingScreen } from '../screens/OnboardingScreen'
 import { HomeScreen } from '../screens/HomeScreen'
 import { ReadingScreen } from '../screens/ReadingScreen'
 import { RecordScreen } from '../screens/RecordScreen'
+import { GroupFeedScreen } from '../screens/GroupFeedScreen'
 
 const Tab = createBottomTabNavigator()
 
@@ -37,6 +38,11 @@ export function AppNavigator() {
           name="Record"
           component={RecordScreen}
           options={{ tabBarLabel: '기록', tabBarIcon: () => <Text>🌿</Text> }}
+        />
+        <Tab.Screen
+          name="GroupFeed"
+          component={GroupFeedScreen}
+          options={{ tabBarLabel: '나눔', tabBarIcon: () => <Text>🤝</Text> }}
         />
       </Tab.Navigator>
     </NavigationContainer>
