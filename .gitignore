@@ -6,19 +6,25 @@ node_modules/
 web-build/
 dist/
 
-# agent & tooling
-.claude/
-.agents/
-brain/
-plan/
-*.log
-
 # build artifacts
 ios/build/
 android/build/
 *.apk
 *.ipa
 *.app
+coverage/
+bug_report/
+
+# agent & tooling
+.claude/
+.agents/
+brain/
+plan/
+.planning/
+*.log
+seisho_discovery_ideas.md
+supabase/SCHEMA.md
+eslint.config.js
 
 # env & secrets
 .env
