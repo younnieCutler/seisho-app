@@ -34,3 +34,4 @@ android/build/
 # system
 .DS_Store
 Thumbs.db
+.worktrees/
