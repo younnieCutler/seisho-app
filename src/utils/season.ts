@@ -11,6 +11,17 @@ export type LiturgySeason =
   | 'PENTECOST'  // 성령강림절
   | 'ORDINARY'   // 일반 주일
 
+export const SEASON_PLAN: Record<string, { book: string; chapter: number }> = {
+  ADVENT:    { book: '이사야', chapter: 40 },
+  CHRISTMAS: { book: '누가복음', chapter: 2 },
+  EPIPHANY:  { book: '마태복음', chapter: 2 },
+  LENT:      { book: '시편', chapter: 51 },
+  HOLY_WEEK: { book: '마가복음', chapter: 15 },
+  EASTER:    { book: '요한복음', chapter: 20 },
+  PENTECOST: { book: '사도행전', chapter: 2 },
+  ORDINARY:  { book: '시편', chapter: 23 },
+}
+
 function getEaster(year: number): Temporal.PlainDate {
   const { month, day } = computus(year)
   return Temporal.PlainDate.from({ year, month, day })

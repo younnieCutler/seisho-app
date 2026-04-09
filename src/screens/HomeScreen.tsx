@@ -2,23 +2,13 @@ import { useEffect, useState } from 'react'
 import { View, Text, TouchableOpacity, StyleSheet, ActivityIndicator } from 'react-native'
 import { useSQLiteContext } from 'expo-sqlite'
 import { Temporal } from '@js-temporal/polyfill'
-import { getCurrentSeason } from '../utils/season'
+import { getCurrentSeason, SEASON_PLAN } from '../utils/season'
 import { getVersesByChapter } from '../lib/db'
 import { getReadDates, markReadToday } from '../lib/storage'
 import { calcStreak } from '../utils/streak'
 import { getTodayKST, getKSTDateString } from '../utils/date'
 
-// 절기별 읽기 플랜 (v1: 고정 챕터)
-const SEASON_PLAN: Record<string, { book: string; chapter: number }> = {
-  ADVENT:    { book: '이사야', chapter: 40 },
-  CHRISTMAS: { book: '누가복음', chapter: 2 },
-  EPIPHANY:  { book: '마태복음', chapter: 2 },
-  LENT:      { book: '시편', chapter: 51 },
-  HOLY_WEEK: { book: '마가복음', chapter: 15 },
-  EASTER:    { book: '요한복음', chapter: 20 },
-  PENTECOST: { book: '사도행전', chapter: 2 },
-  ORDINARY:  { book: '시편', chapter: 23 },
-}
+// 절별 읽기 플랜은 season.ts에서 관리
 
 const SEASON_COLOR: Record<string, string> = {
   ADVENT: '#4A6FA5',

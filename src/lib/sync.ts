@@ -1,6 +1,7 @@
-import { supabase } from './supabase'
+import { supabase, authReady } from './supabase'
 
 export async function syncVerseRead(userId: string | null, date: string): Promise<void> {
+  await authReady
   if (!userId) return
 
   const { error } = await supabase.from('analytics_events').insert({

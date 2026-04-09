@@ -23,10 +23,12 @@ export function RecordScreen() {
   )
 }
 
+import { Colors, FontSize, CommonStyles } from '../utils/theme'
+
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#fff', paddingTop: 24 },
-  title: { fontSize: 20, fontWeight: 'bold', color: '#1a1a1a', paddingHorizontal: 20, marginBottom: 24 },
+  container: { ...CommonStyles.container, paddingTop: 24 },
+  title: { fontSize: FontSize.lg, fontWeight: 'bold', color: Colors.text, paddingHorizontal: 20, marginBottom: 24 },
   streakCard: { alignItems: 'center', marginBottom: 32 },
-  streakNum: { fontSize: 64, fontWeight: 'bold', color: '#4A90E2' },
-  streakLabel: { fontSize: 16, color: '#888' },
+  streakNum: { fontSize: FontSize.xxl, fontWeight: 'bold', color: Colors.primary },
+  streakLabel: { fontSize: FontSize.md, color: Colors.textMuted },
 })

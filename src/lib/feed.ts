@@ -1,4 +1,4 @@
-import { supabase } from './supabase'
+import { supabase, authReady } from './supabase'
 import { getUserId, storage } from './storage'
 import { getKSTDateString } from '../utils/date'
 
@@ -16,6 +16,7 @@ const CACHE_PREFIX = 'feed.cache.'
 export async function getFeedPosts(
   groupCode: string
 ): Promise<{ posts: FeedPost[]; fromCache: boolean }> {
+  await authReady
   const { data, error } = await supabase
     .from('feed_posts')
     .select('*')
@@ -33,6 +34,7 @@ export async function getFeedPosts(
 }
 
 export async function upsertTodayPost(groupCode: string, content: string): Promise<void> {
+  await authReady
   const userId = getUserId()
   if (!userId) throw new Error('Not authenticated')
 

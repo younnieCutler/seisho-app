@@ -2,21 +2,13 @@ import { useEffect, useState } from 'react'
 import { View, Text, FlatList, TouchableOpacity, StyleSheet, ActivityIndicator } from 'react-native'
 import { useSQLiteContext } from 'expo-sqlite'
 import { Temporal } from '@js-temporal/polyfill'
-import { getCurrentSeason } from '../utils/season'
+import { getCurrentSeason, SEASON_PLAN } from '../utils/season'
 import { getVersesByChapter } from '../lib/db'
-import { markReadToday, getReadDates } from '../lib/storage'
+import { markReadToday, getReadDates, getUserId } from '../lib/storage'
+import { syncVerseRead } from '../lib/sync'
 import { getTodayKST, getKSTDateString } from '../utils/date'
 
-const SEASON_PLAN: Record<string, { book: string; chapter: number }> = {
-  ADVENT:    { book: '이사야', chapter: 40 },
-  CHRISTMAS: { book: '누가복음', chapter: 2 },
-  EPIPHANY:  { book: '마태복음', chapter: 2 },
-  LENT:      { book: '시편', chapter: 51 },
-  HOLY_WEEK: { book: '마가복음', chapter: 15 },
-  EASTER:    { book: '요한복음', chapter: 20 },
-  PENTECOST: { book: '사도행전', chapter: 2 },
-  ORDINARY:  { book: '시편', chapter: 23 },
-}
+// 절별 읽기 플랜은 season.ts에서 관리
 
 interface Verse {
   verse: number
@@ -52,6 +44,7 @@ export function ReadingScreen() {
 
   function handleMarkRead() {
     markReadToday()
+    syncVerseRead(getUserId() || null, getKSTDateString()).catch(() => {})
     setReadToday(true)
   }
 
@@ -90,15 +83,17 @@ export function ReadingScreen() {
   )
 }
 
+import { Colors, FontSize, CommonStyles } from '../utils/theme'
+
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#fff' },
-  center: { flex: 1, alignItems: 'center', justifyContent: 'center' },
-  header: { fontSize: 20, fontWeight: 'bold', color: '#1a1a1a', padding: 20, paddingBottom: 12 },
+  container: CommonStyles.container,
+  center: CommonStyles.center,
+  header: { fontSize: FontSize.lg, fontWeight: 'bold', color: Colors.text, padding: 20, paddingBottom: 12 },
   list: { paddingHorizontal: 20, paddingBottom: 100 },
   verseRow: { flexDirection: 'row', marginBottom: 12 },
-  verseNum: { fontSize: 12, color: '#aaa', minWidth: 28, marginTop: 3 },
-  verseText: { flex: 1, fontSize: 16, lineHeight: 26, color: '#1a1a1a' },
-  button: { position: 'absolute', bottom: 24, left: 20, right: 20, padding: 16, borderRadius: 12, backgroundColor: '#4A90E2', alignItems: 'center' },
-  buttonDone: { backgroundColor: '#27AE60' },
-  buttonText: { fontSize: 16, fontWeight: '600', color: '#fff' },
+  verseNum: { fontSize: FontSize.xs, color: Colors.textMuted, minWidth: 28, marginTop: 3 },
+  verseText: { flex: 1, fontSize: FontSize.md, lineHeight: 26, color: Colors.text },
+  button: { ...CommonStyles.button, position: 'absolute', bottom: 24, left: 20, right: 20, padding: 16 },
+  buttonDone: { backgroundColor: Colors.success },
+  buttonText: CommonStyles.buttonText,
 })

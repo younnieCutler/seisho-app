@@ -47,16 +47,18 @@ export function OnboardingScreen({ onComplete }: Props) {
   )
 }
 
+import { Colors, FontSize, CommonStyles } from '../utils/theme'
+
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#fff', alignItems: 'center', justifyContent: 'center', padding: 24 },
-  title: { fontSize: 24, fontWeight: 'bold', color: '#1a1a1a', marginBottom: 8 },
-  subtitle: { fontSize: 16, color: '#666', marginBottom: 40 },
+  container: { ...CommonStyles.container, alignItems: 'center', justifyContent: 'center', padding: 24 },
+  title: { fontSize: FontSize.xl, fontWeight: 'bold', color: Colors.text, marginBottom: 8 },
+  subtitle: { fontSize: FontSize.md, color: Colors.textSecondary, marginBottom: 40 },
   options: { width: '100%', gap: 12, marginBottom: 40 },
-  option: { padding: 16, borderRadius: 12, borderWidth: 1.5, borderColor: '#ddd', alignItems: 'center' },
-  optionSelected: { borderColor: '#4A90E2', backgroundColor: '#EBF3FD' },
-  optionText: { fontSize: 16, color: '#333' },
-  optionTextSelected: { color: '#4A90E2', fontWeight: '600' },
-  button: { width: '100%', padding: 16, borderRadius: 12, backgroundColor: '#4A90E2', alignItems: 'center' },
-  buttonDisabled: { backgroundColor: '#ccc' },
-  buttonText: { fontSize: 16, fontWeight: '600', color: '#fff' },
+  option: { padding: 16, borderRadius: 12, borderWidth: 1.5, borderColor: Colors.border, alignItems: 'center' },
+  optionSelected: { borderColor: Colors.primary, backgroundColor: Colors.primaryLight },
+  optionText: { fontSize: FontSize.md, color: Colors.text },
+  optionTextSelected: { color: Colors.primary, fontWeight: '600' },
+  button: { ...CommonStyles.button, width: '100%', padding: 16 },
+  buttonDisabled: CommonStyles.buttonDisabled,
+  buttonText: CommonStyles.buttonText,
 })

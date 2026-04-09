@@ -1,7 +1,8 @@
-import { supabase } from './supabase'
+import { supabase, authReady } from './supabase'
 import { getUserId } from './storage'
 
 export async function createGroup(): Promise<string> {
+  await authReady
   const userId = getUserId()
   if (!userId) throw new Error('Not authenticated')
 
@@ -22,6 +23,7 @@ export async function createGroup(): Promise<string> {
 }
 
 export async function joinGroup(code: string): Promise<void> {
+  await authReady
   const userId = getUserId()
   if (!userId) throw new Error('Not authenticated')
 
@@ -49,6 +51,7 @@ export async function joinGroup(code: string): Promise<void> {
 }
 
 export async function leaveGroup(code: string): Promise<void> {
+  await authReady
   const userId = getUserId()
   if (!userId) throw new Error('Not authenticated')
 
@@ -61,6 +64,7 @@ export async function leaveGroup(code: string): Promise<void> {
 }
 
 export async function getMyGroups(): Promise<string[]> {
+  await authReady
   const userId = getUserId()
   if (!userId) return []
 
