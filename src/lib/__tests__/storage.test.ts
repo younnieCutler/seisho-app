@@ -7,7 +7,7 @@ jest.mock('../../utils/date', () => ({
     `${d.year}-${String(d.month).padStart(2, '0')}-${String(d.day).padStart(2, '0')}`,
 }))
 
-import { storage, getReadDates, markReadToday, isOnboarded, setOnboarded, getAgeGroup, getUserId, setUserId, getNickname, setNickname, STORAGE_KEYS } from '../storage'
+import { storage, getReadDates, markReadToday, isOnboarded, setOnboarded, getAgeGroup, getUserId, setUserId, getNickname, setNickname, STORAGE_KEYS, getMeditationNotes, saveMeditationNote, getMeditationNoteByDate, deleteMeditationNote } from '../storage'
 
 beforeEach(() => {
   // MMKV 인스턴스는 모듈 레벨에서 생성되므로 테스트 간 격리를 위해 clearAll
@@ -83,5 +83,50 @@ describe('getNickname / setNickname', () => {
   it('setNickname 후 getNickname 반환', () => {
     setNickname('말씀이')
     expect(getNickname()).toBe('말씀이')
+  })
+})
+
+describe('getMeditationNotes / saveMeditationNote', () => {
+  it('저장 전에는 빈 배열 반환', () => {
+    expect(getMeditationNotes()).toEqual([])
+  })
+
+  it('노트 저장 후 조회', () => {
+    saveMeditationNote('2026-04-01', '오늘 시편 23편이 마음에 닿았다')
+    const notes = getMeditationNotes()
+    expect(notes).toHaveLength(1)
+    expect(notes[0]).toEqual({ date: '2026-04-01', content: '오늘 시편 23편이 마음에 닿았다' })
+  })
+
+  it('같은 날짜 중복 저장 시 최신값으로 덮어씀', () => {
+    saveMeditationNote('2026-04-01', '처음 메모')
+    saveMeditationNote('2026-04-01', '수정된 메모')
+    const notes = getMeditationNotes()
+    expect(notes).toHaveLength(1)
+    expect(notes[0].content).toBe('수정된 메모')
+  })
+
+  it('빈 content 저장 시 아무것도 저장 안 함', () => {
+    saveMeditationNote('2026-04-01', '  ')
+    expect(getMeditationNotes()).toEqual([])
+  })
+
+  it('getMeditationNoteByDate — 없는 날짜는 undefined', () => {
+    expect(getMeditationNoteByDate('2026-04-01')).toBeUndefined()
+  })
+
+  it('getMeditationNoteByDate — 저장된 날짜는 노트 반환', () => {
+    saveMeditationNote('2026-04-01', '말씀 묵상')
+    const note = getMeditationNoteByDate('2026-04-01')
+    expect(note).toEqual({ date: '2026-04-01', content: '말씀 묵상' })
+  })
+
+  it('deleteMeditationNote — 해당 날짜 노트만 삭제', () => {
+    saveMeditationNote('2026-04-01', 'A')
+    saveMeditationNote('2026-03-31', 'B')
+    deleteMeditationNote('2026-04-01')
+    const notes = getMeditationNotes()
+    expect(notes).toHaveLength(1)
+    expect(notes[0].date).toBe('2026-03-31')
   })
 })

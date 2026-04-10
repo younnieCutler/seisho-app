@@ -9,6 +9,7 @@ export const STORAGE_KEYS = {
   READ_DATES: 'reading.dates',  // JSON.stringify(string[]) — "YYYY-MM-DD" 배열
   USER_ID: 'user.id',           // Supabase 익명 인증 user_id
   NICKNAME: 'user.nickname',
+  MEDITATION_NOTES: 'meditation.notes',
 } as const
 
 export function getReadDates(): string[] {
@@ -51,4 +52,29 @@ export function getNickname(): string | undefined {
 
 export function setNickname(name: string): void {
   storage.set(STORAGE_KEYS.NICKNAME, name)
+}
+
+export interface MeditationNote {
+  date: string
+  content: string
+}
+
+export function getMeditationNotes(): MeditationNote[] {
+  const raw = storage.getString(STORAGE_KEYS.MEDITATION_NOTES)
+  return raw ? JSON.parse(raw) : []
+}
+
+export function saveMeditationNote(date: string, content: string): void {
+  if (!content.trim()) return
+  const notes = getMeditationNotes().filter(n => n.date !== date)
+  storage.set(STORAGE_KEYS.MEDITATION_NOTES, JSON.stringify([...notes, { date, content: content.trim() }]))
+}
+
+export function getMeditationNoteByDate(date: string): MeditationNote | undefined {
+  return getMeditationNotes().find(n => n.date === date)
+}
+
+export function deleteMeditationNote(date: string): void {
+  const notes = getMeditationNotes().filter(n => n.date !== date)
+  storage.set(STORAGE_KEYS.MEDITATION_NOTES, JSON.stringify(notes))
 }
