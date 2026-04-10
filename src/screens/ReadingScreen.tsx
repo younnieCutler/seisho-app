@@ -63,6 +63,7 @@ export function ReadingScreen() {
   }
 
   function handleSkipNote() {
+    setNoteText('')
     setNoteVisible(false)
   }
 
