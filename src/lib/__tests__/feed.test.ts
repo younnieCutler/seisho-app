@@ -81,25 +81,25 @@ describe('upsertTodayPost', () => {
     const mockUpsert = jest.fn().mockResolvedValue({ error: null })
     ;(supabase.from as jest.Mock).mockReturnValue({ upsert: mockUpsert })
 
-    await upsertTodayPost('ABC123', '오늘의 나눔입니다')
+    await upsertTodayPost('ABC123', '오늘의 나눔입니다', '말씀이')
 
     expect(supabase.from).toHaveBeenCalledWith('feed_posts')
     expect(mockUpsert).toHaveBeenCalledWith(
-      { group_code: 'ABC123', user_id: 'user-uuid-1', content: '오늘의 나눔입니다', date: '2026-04-04' },
+      { group_code: 'ABC123', user_id: 'user-uuid-1', nickname: '말씀이', content: '오늘의 나눔입니다', date: '2026-04-04' },
       { onConflict: 'user_id,group_code,date' }
     )
   })
 
   it('인증 없으면 throw', async () => {
     ;(getUserId as jest.Mock).mockReturnValue(undefined)
-    await expect(upsertTodayPost('ABC123', '내용')).rejects.toThrow('Not authenticated')
+    await expect(upsertTodayPost('ABC123', '내용', '말씀이')).rejects.toThrow('Not authenticated')
   })
 
   it('Supabase 에러 시 throw', async () => {
     ;(supabase.from as jest.Mock).mockReturnValue({
       upsert: jest.fn().mockResolvedValue({ error: { message: 'upsert failed' } }),
     })
-    await expect(upsertTodayPost('ABC123', '내용')).rejects.toThrow('upsert failed')
+    await expect(upsertTodayPost('ABC123', '내용', '말씀이')).rejects.toThrow('upsert failed')
   })
 })
 

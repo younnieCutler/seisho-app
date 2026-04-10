@@ -4,27 +4,26 @@ import { useSQLiteContext } from 'expo-sqlite'
 import { Temporal } from '@js-temporal/polyfill'
 import { getCurrentSeason, SEASON_PLAN } from '../utils/season'
 import { getVersesByChapter } from '../lib/db'
-import { getReadDates, markReadToday } from '../lib/storage'
+import { getReadDates } from '../lib/storage'
 import { calcStreak } from '../utils/streak'
 import { getTodayKST, getKSTDateString } from '../utils/date'
-
-// 절별 읽기 플랜은 season.ts에서 관리
+import { useTheme, FontFamily, FontSize, CommonStyles } from '../utils/theme'
 
 const SEASON_COLOR: Record<string, string> = {
-  ADVENT: '#4A6FA5',
-  CHRISTMAS: '#C0392B',
-  EPIPHANY: '#F39C12',
-  LENT: '#8E44AD',
-  HOLY_WEEK: '#7F8C8D',
-  EASTER: '#F1C40F',
-  PENTECOST: '#E74C3C',
-  ORDINARY: '#27AE60',
+  ADVENT: '#5D6D7E',
+  CHRISTMAS: '#A66B6B',
+  EPIPHANY: '#D4AC0D',
+  LENT: '#7D6B91',
+  HOLY_WEEK: '#5D666D',
+  EASTER: '#C5A059',
+  PENTECOST: '#B36B6B',
+  ORDINARY: '#6B8E7B',
 }
 
 const SEASON_KR: Record<string, string> = {
   ADVENT: '대림절', CHRISTMAS: '성탄절', EPIPHANY: '주현절',
   LENT: '사순절', HOLY_WEEK: '고난주간', EASTER: '부활절',
-  PENTECOST: '성령강림절', ORDINARY: '일반 주일',
+  PENTECOST: '성령강림절', ORDINARY: '일반 주간',
 }
 
 interface Props {
@@ -32,6 +31,7 @@ interface Props {
 }
 
 export function HomeScreen({ onGoToReading }: Props) {
+  const { colors } = useTheme()
   const db = useSQLiteContext()
   const [verse, setVerse] = useState<string>('')
   const [reference, setReference] = useState<string>('')
@@ -65,43 +65,114 @@ export function HomeScreen({ onGoToReading }: Props) {
 
   if (loading) {
     return (
-      <View style={styles.center}>
-        <ActivityIndicator size="large" color="#4A90E2" />
+      <View style={[CommonStyles.center, { backgroundColor: colors.background }]}>
+        <ActivityIndicator size="small" color={colors.primary} />
       </View>
     )
   }
 
   return (
-    <View style={styles.container}>
-      <View style={[styles.seasonBadge, { backgroundColor: SEASON_COLOR[season] }]}>
-        <Text style={styles.seasonText}>{SEASON_KR[season]}</Text>
+    <View style={[styles.container, { backgroundColor: colors.background }]}>
+      <View style={[styles.card, { backgroundColor: colors.surface }, CommonStyles.shadow]}>
+        <View style={[styles.seasonBadge, { backgroundColor: `${SEASON_COLOR[season]}22` }]}>
+          <Text style={[styles.seasonText, { color: SEASON_COLOR[season] }]}>{SEASON_KR[season]}</Text>
+        </View>
+
+        <Text style={[styles.reference, { color: colors.textMuted }]}>{reference}</Text>
+        <Text style={[styles.verse, { color: colors.text }]}>{verse}</Text>
+        
+        <View style={[styles.divider, { backgroundColor: colors.border }]} />
+
+        <View style={styles.streakRow}>
+          <View>
+            <Text style={[styles.streakLabel, { color: colors.textSecondary }]}>지속 가능한 묵상</Text>
+            <Text style={[styles.streakDays, { color: colors.text }]}>{streak}일째 이어가는 중</Text>
+          </View>
+          <View style={[styles.streakBadge, { backgroundColor: colors.primary }]}>
+             <Text style={styles.streakIcon}>✦</Text>
+          </View>
+        </View>
       </View>
 
-      <Text style={styles.reference}>{reference}</Text>
-      <Text style={styles.verse}>{verse}</Text>
-
-      <View style={styles.streakRow}>
-        <Text style={styles.streakLabel}>연속 읽기</Text>
-        <Text style={styles.streakCount}>{streak}일</Text>
-      </View>
-
-      <TouchableOpacity style={styles.button} onPress={onGoToReading}>
-        <Text style={styles.buttonText}>성경 읽기 시작</Text>
+      <TouchableOpacity 
+        style={[styles.button, { backgroundColor: colors.primary }]} 
+        onPress={onGoToReading}
+        activeOpacity={0.8}
+      >
+        <Text style={styles.buttonText}>오늘의 말씀 읽기</Text>
       </TouchableOpacity>
     </View>
   )
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#fff', padding: 24, justifyContent: 'center' },
-  center: { flex: 1, alignItems: 'center', justifyContent: 'center' },
-  seasonBadge: { alignSelf: 'flex-start', paddingHorizontal: 12, paddingVertical: 6, borderRadius: 20, marginBottom: 20 },
-  seasonText: { color: '#fff', fontWeight: '600', fontSize: 14 },
-  reference: { fontSize: 14, color: '#888', marginBottom: 8 },
-  verse: { fontSize: 20, lineHeight: 32, color: '#1a1a1a', marginBottom: 32 },
-  streakRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginBottom: 24 },
-  streakLabel: { fontSize: 16, color: '#666' },
-  streakCount: { fontSize: 24, fontWeight: 'bold', color: '#4A90E2' },
-  button: { padding: 16, borderRadius: 12, backgroundColor: '#4A90E2', alignItems: 'center' },
-  buttonText: { fontSize: 16, fontWeight: '600', color: '#fff' },
+  container: { flex: 1, padding: 24, justifyContent: 'center' },
+  card: {
+    padding: 32,
+    borderRadius: 32,
+    marginBottom: 40,
+  },
+  seasonBadge: {
+    alignSelf: 'flex-start',
+    paddingHorizontal: 12,
+    paddingVertical: 4,
+    borderRadius: 10,
+    marginBottom: 24,
+  },
+  seasonText: {
+    fontFamily: FontFamily.interfaceBold,
+    fontSize: FontSize.xs,
+  },
+  reference: {
+    fontFamily: FontFamily.interface,
+    fontSize: FontSize.sm,
+    marginBottom: 12,
+  },
+  verse: {
+    fontFamily: FontFamily.content,
+    fontSize: FontSize.xl,
+    lineHeight: 38,
+    marginBottom: 32,
+  },
+  divider: {
+    height: 1,
+    width: '100%',
+    marginBottom: 24,
+  },
+  streakRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  streakLabel: {
+    fontFamily: FontFamily.interface,
+    fontSize: FontSize.xs,
+    marginBottom: 4,
+  },
+  streakDays: {
+    fontFamily: FontFamily.interfaceBold,
+    fontSize: FontSize.md,
+  },
+  streakBadge: {
+    width: 44,
+    height: 44,
+    borderRadius: 22,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  streakIcon: {
+    color: '#fff',
+    fontSize: 20,
+  },
+  button: {
+    padding: 20,
+    borderRadius: 24,
+    alignItems: 'center',
+  },
+  buttonText: {
+    fontFamily: FontFamily.interfaceBold,
+    fontSize: FontSize.md,
+    color: '#fff',
+  },
 })
+

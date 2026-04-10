@@ -4,9 +4,10 @@ import { useGroupFeed } from '../hooks/useGroupFeed'
 import { NicknameSetup } from './group/NicknameSetup'
 import { GroupJoinCreate } from './group/GroupJoinCreate'
 import { FeedView } from './group/FeedView'
-import { CommonStyles } from '../utils/theme'
+import { useTheme, CommonStyles } from '../utils/theme'
 
 export function GroupFeedScreen() {
+  const { colors } = useTheme()
   const {
     viewState,
     posts,
@@ -58,36 +59,37 @@ export function GroupFeedScreen() {
 
   if (viewState === 'loading') {
     return (
-      <View style={CommonStyles.center}>
-        <ActivityIndicator size="large" />
+      <View style={[CommonStyles.center, { backgroundColor: colors.background }]}>
+        <ActivityIndicator size="small" color={colors.primary} />
       </View>
     )
   }
 
-  if (viewState === 'nickname_setup') {
-    return <NicknameSetup onSave={handleSaveNickname} />
-  }
-
-  if (viewState === 'no_group') {
-    return (
-      <GroupJoinCreate 
-        onCreate={onCreateWrapper} 
-        onJoin={handleJoinGroup} 
-        joinError={joinError} 
-        setJoinError={setJoinError} 
-      />
-    )
-  }
-
   return (
-    <FeedView
-      posts={posts}
-      isOffline={isOffline}
-      postContent={postContent}
-      setPostContent={setPostContent}
-      onSubmit={onSubmitWrapper}
-      isSaving={isSaving}
-      onLeave={onLeaveWrapper}
-    />
+    <View style={{ flex: 1, backgroundColor: colors.background }}>
+      {viewState === 'nickname_setup' && (
+        <NicknameSetup onSave={handleSaveNickname} />
+      )}
+      {viewState === 'no_group' && (
+        <GroupJoinCreate 
+          onCreate={onCreateWrapper} 
+          onJoin={handleJoinGroup} 
+          joinError={joinError} 
+          setJoinError={setJoinError} 
+        />
+      )}
+      {viewState === 'has_group' && (
+        <FeedView
+          posts={posts}
+          isOffline={isOffline}
+          postContent={postContent}
+          setPostContent={setPostContent}
+          onSubmit={onSubmitWrapper}
+          isSaving={isSaving}
+          onLeave={onLeaveWrapper}
+        />
+      )}
+    </View>
   )
 }
+

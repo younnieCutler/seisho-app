@@ -2,6 +2,16 @@ import type { SQLiteDatabase } from 'expo-sqlite'
 
 export type { SQLiteDatabase }
 
+function decodeHtml(text: string): string {
+  return text
+    .replace(/&#x27;/g, "'")
+    .replace(/&#39;/g, "'")
+    .replace(/&amp;/g, '&')
+    .replace(/&quot;/g, '"')
+    .replace(/&lt;/g, '<')
+    .replace(/&gt;/g, '>')
+}
+
 export type Verse = {
   book: string
   chapter: number
@@ -30,7 +40,8 @@ export async function getVersesByChapter(
   book: string,
   chapter: number,
 ): Promise<Verse[]> {
-  return db.getAllAsync<Verse>(SELECT_VERSES, [book, chapter])
+  const rows = await db.getAllAsync<Verse>(SELECT_VERSES, [book, chapter])
+  return rows.map((v) => ({ ...v, text: decodeHtml(v.text) }))
 }
 
 export async function getVerseRange(
@@ -40,5 +51,6 @@ export async function getVerseRange(
   startVerse: number,
   endVerse: number,
 ): Promise<Verse[]> {
-  return db.getAllAsync<Verse>(SELECT_VERSE_RANGE, [book, chapter, startVerse, endVerse])
+  const rows = await db.getAllAsync<Verse>(SELECT_VERSE_RANGE, [book, chapter, startVerse, endVerse])
+  return rows.map((v) => ({ ...v, text: decodeHtml(v.text) }))
 }

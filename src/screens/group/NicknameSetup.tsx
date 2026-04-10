@@ -1,36 +1,64 @@
 import React, { useState } from 'react'
 import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native'
-import { Colors, FontSize, CommonStyles } from '../../utils/theme'
+import { useTheme, FontFamily, FontSize, CommonStyles } from '../../utils/theme'
 
 interface Props {
   onSave: (nickname: string) => void
 }
 
 export function NicknameSetup({ onSave }: Props) {
+  const { colors } = useTheme()
   const [nicknameInput, setNicknameInput] = useState('')
 
   return (
-    <View style={CommonStyles.center}>
-      <Text style={styles.title}>나눔에서 사용할 별명을 입력해주세요</Text>
+    <View style={[CommonStyles.center, { padding: 32 }]}>
+      <Text style={[styles.title, { color: colors.text }]}>나눔을 위해{"\n"}별명을 알려주세요</Text>
       <TextInput
-        style={styles.input}
+        style={[styles.input, { backgroundColor: colors.surface, color: colors.text, borderColor: colors.border }]}
         value={nicknameInput}
         onChangeText={setNicknameInput}
         placeholder="예: 말씀이"
+        placeholderTextColor={colors.textMuted}
         maxLength={20}
+        autoFocus
       />
-      <TouchableOpacity style={styles.button} onPress={() => onSave(nicknameInput)}>
-        <Text style={CommonStyles.buttonText}>저장</Text>
+      <TouchableOpacity 
+        style={[styles.button, { backgroundColor: colors.primary }, !nicknameInput && { opacity: 0.5 }]} 
+        onPress={() => nicknameInput && onSave(nicknameInput)}
+        disabled={!nicknameInput}
+      >
+        <Text style={styles.buttonText}>시작하기</Text>
       </TouchableOpacity>
     </View>
   )
 }
 
 const styles = StyleSheet.create({
-  title: { fontSize: FontSize.md, fontWeight: '600', marginBottom: 16, textAlign: 'center', color: Colors.text },
-  input: {
-    width: '100%', borderWidth: 1, borderColor: Colors.border, borderRadius: 8,
-    padding: 12, marginBottom: 16, fontSize: FontSize.md, color: Colors.text
+  title: { 
+    fontFamily: FontFamily.interfaceBold,
+    fontSize: FontSize.xl, 
+    marginBottom: 32, 
+    textAlign: 'center', 
   },
-  button: { ...CommonStyles.button, width: '100%', padding: 12 }
+  input: {
+    width: '100%', 
+    borderWidth: 1, 
+    borderRadius: 16,
+    padding: 16, 
+    marginBottom: 24, 
+    fontSize: FontSize.md,
+    fontFamily: FontFamily.interface,
+  },
+  button: { 
+    width: '100%', 
+    padding: 18, 
+    borderRadius: 20,
+    alignItems: 'center',
+  },
+  buttonText: {
+    fontFamily: FontFamily.interfaceBold,
+    fontSize: FontSize.md,
+    color: '#fff',
+  }
 })
+

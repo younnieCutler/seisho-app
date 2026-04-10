@@ -33,7 +33,9 @@
     },
     "plugins": [
       "expo-sqlite",
-      "expo-asset"
+      ["expo-asset", {
+        "assets": ["assets/bible/ko.db"]
+      }]
     ],
     "extra": {
       "eas": {

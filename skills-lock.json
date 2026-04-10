@@ -6,10 +6,25 @@
       "sourceType": "github",
       "computedHash": "9ea9f16374765c1b16764a51bd43a64098921b33f48e94d9c5c1cce24b335c10"
     },
+    "mobile-ios-design": {
+      "source": "wshobson/agents",
+      "sourceType": "github",
+      "computedHash": "3902f919488d8ddc983e157bbcd5f16b739b84eeaab57002bf52b7f9601ed6ad"
+    },
+    "mobile-ux-optimizer": {
+      "source": "erichowens/some_claude_skills",
+      "sourceType": "github",
+      "computedHash": "f2c02305be4b3860a7e21939faf4fad7fe969054a3372788cd1b3daa2f8c0485"
+    },
     "react-native": {
       "source": "jezweb/claude-skills",
       "sourceType": "github",
       "computedHash": "b331e2a59846ed62d09b58a47504e8f3d6588a7cdd6ea75b100e2fc9ebb52faf"
+    },
+    "sleek-design-mobile-apps": {
+      "source": "sleekdotdesign/agent-skills",
+      "sourceType": "github",
+      "computedHash": "bf5dd6714897077fdc7a4ba007e5a7ee9696e5afc4620523738be786366852f8"
     },
     "supabase-postgres-best-practices": {
       "source": "supabase/agent-skills",
