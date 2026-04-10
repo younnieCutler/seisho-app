@@ -61,7 +61,11 @@ export interface MeditationNote {
 
 export function getMeditationNotes(): MeditationNote[] {
   const raw = storage.getString(STORAGE_KEYS.MEDITATION_NOTES)
-  return raw ? JSON.parse(raw) : []
+  try {
+    return raw ? JSON.parse(raw) : []
+  } catch {
+    return []
+  }
 }
 
 export function saveMeditationNote(date: string, content: string): void {

@@ -129,4 +129,17 @@ describe('getMeditationNotes / saveMeditationNote', () => {
     expect(notes).toHaveLength(1)
     expect(notes[0].date).toBe('2026-03-31')
   })
+
+  it('deleteMeditationNote — 없는 날짜 삭제 시 기존 노트 유지', () => {
+    saveMeditationNote('2026-04-01', 'A')
+    deleteMeditationNote('1999-01-01')
+    expect(getMeditationNotes()).toHaveLength(1)
+  })
+
+  it('여러 날짜 노트 모두 조회', () => {
+    saveMeditationNote('2026-04-01', 'A')
+    saveMeditationNote('2026-04-02', 'B')
+    const notes = getMeditationNotes()
+    expect(notes).toHaveLength(2)
+  })
 })
